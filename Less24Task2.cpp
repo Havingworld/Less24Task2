@@ -53,11 +53,6 @@ int main() {
         birthdays[name] = birthday;
     }
 
-    //std::time_t now = std::time(nullptr);
-    //std::tm* localTime = std::localtime(&now);
-    //int currentMonth = localTime->tm_mon + 1;
-    //int currentDay = localTime->tm_mday;
-    
     //находим ближайшие дени рождения
     std::map<int, std::string> nearestBirthdays;
     for (auto& it : birthdays) {
@@ -76,8 +71,7 @@ int main() {
         else {
             auto itf = birthdays.find(it.second)->second;
             std::cout << it.second << "'s birthday is in " << it.first 
-                << " days (" << std::setw(2) << std::setfill('0') 
-                << itf.month << "/" << std::setw(2) << std::setfill('0') << itf.day << ")" << std::endl;
+                << " days (" << itf.month << "/" << itf.day << ")" << std::endl;
         }
     }
 
