@@ -35,7 +35,7 @@ int getDaysUntilBirthday(struct BirthDate birthday) {
     target.tm_sec = { 0 };
 
     std::time_t targetTime = std::mktime(&target);
-    return ((targetTime - now) / (24 * 3600));
+    return ((now - targetTime) / (24 * 3600));
 }
 
 int main() {
