@@ -14,11 +14,11 @@ struct BirthDate {
 int getDaysUntilBirthday(struct BirthDate birthday) {
     std::time_t now = std::time(nullptr);
     std::tm* localTime = std::localtime(&now);
-    int currentYear = localTime->tm_year + 1970;
+    int currentYear = localTime->tm_year;
     int currentMonth = localTime->tm_mon + 1;
     int currentDay = localTime->tm_mday;
 
-    int targetYear = birthday.year;
+    int targetYear = currentYear;
     int targetMonth = birthday.month;
     int targetDay = birthday.day;
 
@@ -27,7 +27,7 @@ int getDaysUntilBirthday(struct BirthDate birthday) {
     }
 
     std::tm target{};
-    target.tm_year = { targetYear - 1970 };
+    target.tm_year = { targetYear};
     target.tm_mon = { targetMonth - 1 };
     target.tm_mday = { targetDay };
     target.tm_hour = { 0 };
@@ -35,7 +35,7 @@ int getDaysUntilBirthday(struct BirthDate birthday) {
     target.tm_sec = { 0 };
 
     std::time_t targetTime = std::mktime(&target);
-    return ((now - targetTime) / (24 * 3600));
+    return ((targetTime - now) / (24 * 3600));
 }
 
 int main() {
