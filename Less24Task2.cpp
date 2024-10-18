@@ -1,8 +1,9 @@
-﻿#include <iostream>
+#include <iostream>
 #include <map>
 #include <ctime>
 #include <iomanip>
 #include <string>
+#include <vector>
 #pragma warning(disable : 4996)
 
 struct BirthDate {
@@ -35,7 +36,7 @@ int getDaysUntilBirthday(struct BirthDate birthday) {
     target.tm_sec = { 0 };
 
     std::time_t targetTime = std::mktime(&target);
-    return ((targetTime - now) / (24 * 3600));
+    return ((targetTime - now) / (static_cast<long long>(24) * 3600));
 }
 
 int main() {
@@ -54,29 +55,30 @@ int main() {
     }
 
     //находим ближайшие дени рождения
-    std::map<int, std::string> nearestBirthdays;
+    std::map<int, std::vector<std::string>> nearestBirthdays;
     for (auto& it : birthdays) {
         int daysUntil = getDaysUntilBirthday(it.second); 
         if (daysUntil >= 0) {
-            nearestBirthdays[daysUntil] = it.first;
+            nearestBirthdays[daysUntil].push_back(it.first);
         }
     }
-
-    bool hasBirthdayToday = false;
-    for (auto& it : nearestBirthdays) {
-        if (it.first == 0) {
-            std::cout << "Happy birthday, " << it.second << "!" << std::endl;
-            hasBirthdayToday = true;
+  
+    if(nearestBirthdays.empty()) {
+        std::cout << "No birthdays today." << std::endl;
+    }
+    else if (nearestBirthdays.begin()->first == 0) {
+        auto it_nearBirt = nearestBirthdays.begin();
+        for (auto cNames : it_nearBirt->second) {
+            std::cout << "Happy birthday, " << cNames << "!" << std::endl;
         }
-        else {
-            auto itf = birthdays.find(it.second)->second;
-            std::cout << it.second << "'s birthday is in " << it.first 
+    }
+    else {
+        auto it_nearBirt = nearestBirthdays.begin();
+        for (auto cNames : it_nearBirt->second) {
+            auto itf = birthdays.find(cNames)->second;
+            std::cout << cNames << "'s birthday is in " << it_nearBirt->first
                 << " days (" << itf.month << "/" << itf.day << ")" << std::endl;
         }
-    }
-
-    if (!hasBirthdayToday) {
-        std::cout << "No birthdays today." << std::endl;
     }
 
     return 0;
